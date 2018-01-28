@@ -19,6 +19,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "dominos": "^2.1.1",
         "path": "^0.12.7",
         "pizzapi": "0.0.8",
         "tslib": "^1.9.0"
@@ -26,7 +27,7 @@
     "devDependencies": {
         "ts-loader": "^3.3.1",
         "typescript": "^2.6.2",
-        "uglify-es": "^3.3.8",
+        "uglify-es": "^3.3.9",
         "uglify-js": "^3.3.9",
         "webpack": "^3.10.0",
         "webpack-dev-server": "^2.11.1"

@@ -1,23 +1,24 @@
-import { Order, Address, Customer, Store, Track, Item, Util, Payment } from "pizzapi"
+import { Order, Address, Customer, Store, Track, Item, Util, Payment } from "dominos"
 
 export class App {
-    private myAddress: Address
+    private home: object;
+    private myAddress: Address;
 
     constructor(home: object) {
+        this.home = home;
         this.myAddress = new Address(home)
     }
 
-    async searchNear(): Promise<string[]> {
-        Util.findNearbyStores(
-            this.myAddress,
-            'Delivery',
-            function(storeData){
-                console.log(storeData);
-
-            }
-        );
+    searchNear(): Promise<string[]> {
         return new Promise<string[]>((resolve, reject) => {
-            resolve([""])
+            Util.findNearbyStores(
+                '11 rue maryse bastié',
+                'Delivery',
+                function(storeData){
+                    console.log(storeData);
+                    resolve([""])
+                }
+            )
         })
     }
 
@@ -34,7 +35,10 @@ let app = new App({
     PostalCode: 69008
 });
 
-app.searchNear();
+app.searchNear().then((tab) => {
+    console.log("toto");
+    console.log(tab)
+});
 
 // for test
 App.run();

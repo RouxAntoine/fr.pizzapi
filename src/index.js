@@ -1,20 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = require("tslib");
-var pizzapi_1 = require("pizzapi");
+var dominos_1 = require("dominos");
 var App = /** @class */ (function () {
     function App(home) {
-        this.myAddress = new pizzapi_1.Address(home);
+        this.home = home;
+        this.myAddress = new dominos_1.Address(home);
     }
     App.prototype.searchNear = function () {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            return tslib_1.__generator(this, function (_a) {
-                pizzapi_1.Util.findNearbyStores(this.myAddress, 'Delivery', function (storeData) {
-                    console.log(storeData);
-                });
-                return [2 /*return*/, new Promise(function (resolve, reject) {
-                        resolve([""]);
-                    })];
+        return new Promise(function (resolve, reject) {
+            dominos_1.Util.findNearbyStores('11 rue maryse bastié', 'Delivery', function (storeData) {
+                console.log(storeData);
+                resolve([""]);
             });
         });
     };
@@ -31,7 +27,10 @@ var app = new App({
     Region: 'Rhône alpes',
     PostalCode: 69008
 });
-app.searchNear();
+app.searchNear().then(function (tab) {
+    console.log("toto");
+    console.log(tab);
+});
 // for test
 App.run();
 //# sourceMappingURL=index.js.map
