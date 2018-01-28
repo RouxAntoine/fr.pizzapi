@@ -13,6 +13,9 @@
     "allowJs": true,
     "outDir": "./dist/"
   },
+  "files": [
+    "./typings/json.d.ts"
+  ],
   "exclude": [
     "./node_modules",
     "./dist/",

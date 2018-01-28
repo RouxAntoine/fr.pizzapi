@@ -1,4 +1,5 @@
 import { Order, Address, Customer, Store, Track, Item, Util, Payment } from "pizzapi"
+import * as json from './conf/urls.json'
 
 export class App {
     private home: object;
@@ -17,7 +18,7 @@ export class App {
                 function(storeData: object){
                     console.log(storeData);
                 }
-            )
+            );
             resolve([""])
         })
     }
@@ -37,6 +38,8 @@ let app = new App({
 
 app.searchNear().then((tab) => {
     console.log("totoa");
+    console.log(json);
+    console.log(typeof json);
     console.log(tab)
 });
 
