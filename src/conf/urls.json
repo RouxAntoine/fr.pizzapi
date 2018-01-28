@@ -1,6 +1,6 @@
 {
-    "test": "ceci est un test pour l'import de json"
-    "referer": "https://commande.dominos.fr/eStore/fr/CustomerDetails/Delivery"
+    "test": "ceci est un test pour l'import de json",
+    "referer": "https://commande.dominos.fr/eStore/fr/CustomerDetails/Delivery",
     "sourceUri":"www.dominos.fr/",
     "store": {
         "find": "https://www.dominos.fr/trouver-son-dominos?SearchCriteria=${code}",
