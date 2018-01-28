@@ -1,4 +1,4 @@
-import { Order, Address, Customer, Store, Track, Item, Util, Payment } from "dominos"
+import { Order, Address, Customer, Store, Track, Item, Util, Payment } from "pizzapi"
 
 export class App {
     private home: object;
@@ -14,11 +14,11 @@ export class App {
             Util.findNearbyStores(
                 '11 rue maryse bastié',
                 'Delivery',
-                function(storeData){
+                function(storeData: object){
                     console.log(storeData);
-                    resolve([""])
                 }
             )
+            resolve([""])
         })
     }
 
@@ -36,7 +36,7 @@ let app = new App({
 });
 
 app.searchNear().then((tab) => {
-    console.log("toto");
+    console.log("totoa");
     console.log(tab)
 });
 

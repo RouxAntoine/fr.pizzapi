@@ -1,16 +1,22 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "ES5",
+    "module": "es6",
+    "target": "es5",
     "jsx": "react",
     "lib": ["es5", "es2015.promise", "dom", "es7"],
     "sourceMap": true,
     "importHelpers": true,
+    "moduleResolution": "node",
+    "strictNullChecks": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "outDir": "./dist/"
   },
   "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
+    "./node_modules",
+    "./dist/",
+    "**/*.d.ts",
+    "**.config.js"
   ]
 }
