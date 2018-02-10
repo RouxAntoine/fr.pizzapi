@@ -1,5 +1,6 @@
 import { Order, Address, Customer, Store, Track, Item, Util, Payment } from "pizzapi"
 import * as json from './conf/urls.json'
+import { Http } from './http.ts'
 
 export class App {
     private home: object;
@@ -10,16 +11,20 @@ export class App {
         this.myAddress = new Address(home)
     }
 
-    searchNear(): Promise<string[]> {
+    searchNearestStore(): Promise<string[]> {
         return new Promise<string[]>((resolve, reject) => {
-            Util.findNearbyStores(
-                '11 rue maryse bastié',
-                'Delivery',
-                function(storeData: object){
-                    console.log(storeData);
-                }
+            let addressFind = json.store.find;
+            let url = addressFind.replace(
+                '${code}',
+                encodeURI(
+                    "LYON"
+                )
             );
-            resolve([""])
+            console.log(url);
+            let http = new Http();
+            http.get(url, function(res){
+                console.log(res);
+            });
         })
     }
 
@@ -36,11 +41,13 @@ let app = new App({
     PostalCode: 69008
 });
 
-app.searchNear().then((tab) => {
+app.searchNearestStore().then((tab) => {
     console.log("totoa");
     console.log(json);
     console.log(typeof json);
     console.log(tab)
+}).catch((res) => {
+    console.log(res);
 });
 
 // for test
