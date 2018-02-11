@@ -1,6 +1,6 @@
 import { Order, Address, Customer, Store, Track, Item, Util, Payment } from "pizzapi";
-import { Http } from './http';
-import jsonReaderClass from './tools/jsonReader';
+import { Http } from './tools/Http';
+import jsonReaderClass from './tools/JsonReader';
 import 'source-map-support/register';                    // permet le support dees source map avec node js
 
 let json = jsonReaderClass("./conf/urls.json").data;

@@ -5,9 +5,9 @@ import { exists } from 'fs';
 /**
  * default timeout value 5 sec
  */
-export default (filePath: string, timeout:number = 5) => new jsonReader(filePath, timeout);
+export default (filePath: string, timeout: number = 5) => new JsonReader(filePath, timeout);
 
-class jsonReader {
+class JsonReader {
     private _data: string;
     private timeout: number;
     // in millisecond
