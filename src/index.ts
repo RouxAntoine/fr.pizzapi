@@ -1,12 +1,17 @@
-import { Order, Address, Customer, Store, Track, Item, Util, Payment } from "pizzapi"
-import { Http } from './http'
+import { Order, Address, Customer, Store, Track, Item, Util, Payment } from "pizzapi";
+import { Http } from './http';
 import jsonReaderClass from './tools/jsonReader';
-import 'source-map-support/register'                    // permet le support dees source map avec node js
+import 'source-map-support/register';                    // permet le support dees source map avec node js
 
-let json = jsonReaderClass('./conf/urls.json').data;
+let json = jsonReaderClass("./conf/urls.json").data;
 console.log(json);
 
 export class App {
+    public static run(): void {
+        // this.api
+        console.log("hello world !!!")
+    }
+
     private home: object;
     private myAddress: Address;
 
@@ -15,11 +20,11 @@ export class App {
         this.myAddress = new Address(home)
     }
 
-    searchNearestStore(): Promise<string[]> {
+    public searchNearestStore(): Promise<string[]> {
         return new Promise<string[]>((resolve, reject) => {
             let addressFind = json.store.find;
             let url = addressFind.replace(
-                '${code}',
+                "${code}",
                 encodeURI(
                     "LYON"
                 )
@@ -29,20 +34,15 @@ export class App {
             http.get(url, function(res){
                 console.log(res);
             });
-        })
-    }
-
-    static run(): void {
-        // this.api
-        console.log("hello world !!!")
+        });
     }
 }
 
 let app = new App({
-    Street: '11 rue maryse bastie',
-    City: 'Lyon',
-    Region: 'Rhône alpes',
-    PostalCode: 69008
+    City: "Lyon",
+    PostalCode: 69008,
+    Region: "Rhône alpes",
+    Street: "11 rue maryse bastie",
 });
 
 app.searchNearestStore().then((tab) => {
