@@ -1,25 +1,31 @@
 {
+  "compileOnSave": true,
   "compilerOptions": {
-    "module": "es6",
     "target": "es5",
-    "jsx": "react",
-    "lib": ["es5", "es2015.promise", "dom", "es7"],
-    "sourceMap": true,
-    "importHelpers": true,
+    "module": "commonjs",
     "moduleResolution": "node",
+
+    "lib": ["es5", "es2015.promise", "dom", "es7"],
+    
+    "importHelpers": true,
     "strictNullChecks": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    
     "allowJs": true,
-    "outDir": "./dist/"
+    "sourceMap": true,
+
+    "outDir": "./dist/",
+    "rootDir": "src/",
+    "typeRoots" : [
+      "node_modules/@types",
+      "typings/"
+    ]
   },
-  "files": [
-    "./typings/json.d.ts"
-  ],
   "exclude": [
     "./node_modules",
     "./dist/",
-    "**/*.d.ts",
     "**.config.js"
   ]
 }
+

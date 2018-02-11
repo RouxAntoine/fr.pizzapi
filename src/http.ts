@@ -1,5 +1,7 @@
 import http from "request"
-import * as json from './conf/urls.json'
+import jsonReaderClass from './tools/jsonReader';
+
+let json = jsonReaderClass('./conf/urls.json').data;
 
 export class Http {
 
@@ -44,6 +46,6 @@ export class Http {
                 success: true,
                 result: parsed
             });
-        }
+        });
     }
 }

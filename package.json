@@ -4,33 +4,41 @@
     "description": "",
     "main": "dist/index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start:dev": "webpack-dev-server",
-        "start": "webpack --watch",
-        "run": "node dist/bundle.js"
+        "build": "concurrently 'tsc' 'webpack'",
+        "lint": "tslint --config tslint.json --exclude='**/*.d.ts' --exclude='node_modules/**/*.ts' src/**/*.ts --force",
+        "run": "node dist/index.js",
+
+        "build:clean": "rimraf dist",
+        "typings:install": "typings install",
+
+        "build:watch": "concurrently 'tsc -w' 'webpack -w'"
     },
     "repository": {
         "type": "git",
         "url": "gitolite@109.25.55.189:nodeJs/apidomino.git"
     },
     "keywords": [
-        "pizza"
+        "pizza",
+        "dominos"
     ],
     "author": "",
     "license": "ISC",
     "dependencies": {
         "dominos": "^2.1.1",
         "path": "^0.12.7",
-        "pizzapi": "0.0.8",
-        "tslib": "^1.9.0"
+        "concurrently": "^2.2.0",
+        "file-loader": "^1.1.6",
+        "json-loader": "^0.5.7",
+        "typescript": "^2.7.1",
+        "pizzapi": "0.0.8"
     },
     "devDependencies": {
-        "json-loader": "^0.5.7",
-        "ts-loader": "^3.3.1",
-        "typescript": "^2.6.2",
-        "uglify-es": "^3.3.9",
-        "uglify-js": "^3.3.9",
-        "webpack": "^3.10.0",
+        "@types/node": "^9.4.5",
+        "rimraf": "^2.5.3",
+        "source-map-support": "^0.5.3",
+        "tslint": "^3.13.0",
+        "typings": "^1.3.1",
+        "webpack": "^3.11.0",
         "webpack-dev-server": "^2.11.1"
     }
 }

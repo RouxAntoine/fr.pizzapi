@@ -1,20 +1,32 @@
 const path = require('path');
 
 module.exports = {
-    entry: './src/index.ts',
-    devtool: 'inline-source-map',
-    target: "node",
+    entry: './src/conf/urls.json',
+    target: "web",
     devServer: {
         host: "localhost",
         port: 4444,
         https: true
     },
     module: {
-        rules: [{
-            test: /\.tsx?$/,
-            use: 'ts-loader',
-            exclude: /node_modules/
-        }]
+        loaders: [{
+                test: /\.(jpe?g|gif|png|svg|woff|ttf|wav|mp3|json)$/,
+                loader: "file-loader",
+                options: {
+                    // '[path][name].[ext]';
+                    name: (path) => {
+                        let out = path.replace(__dirname + "/src", "");
+                        console.log(`output file path ${out} into ${__dirname+"/dist"}`);
+                        return out;
+                    }
+                }
+            }
+            // ,
+            // {
+            //     test: /\.json$/,
+            //     loader: 'json'
+            // }
+        ]
     },
     output: {
         filename: 'bundle.js',
