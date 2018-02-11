@@ -35,9 +35,11 @@ export class App {
                 let stores: Array<Store> = [];
                 let $ = cheerio.load(res);
                 $('.store-search-results').find('.store-information').each(function(i, element) {
-                    let name = $(this).find('h4').text();
+                    let name = $(this).find('h4').text().replace( /\s/g, '');
                     let id = $(this).find('a').next()['2']['attribs']['id'].replace( /^\D+/g, '');
-                    let store = new Store(id, "phone", "street", name);
+                    let phone = $(this).find('a')['2']['attribs']['href'].replace( /^\D+/g, '').replace( /\s/g, '');
+                    
+                    let store = new Store(id, phone, name);
                     stores.push(store);
                 });
                 console.log(stores);
