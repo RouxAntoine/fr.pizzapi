@@ -5,26 +5,26 @@ let json = jsonReaderClass('./conf/urls.json').data;
 
 export class Http {
 
-    get(url, callback): void {
-        var requestBody = {
-            uri: url,
+    public get(url, callback): void {
+        let requestBody = {
             headers: {
-                'Referer': json.referer
-            }
+                'Referer': json.referer,
+            },
+            uri: url,
         };
         http.get(requestBody, function (error, res, body) {
-            if (error){  //If request errored out.
+            if (error) {  // If request errored out.
                 console.log("Erreur ici");
                 callback({
+                    message: error,
                     success: false,
-                    message: error
                 });
                 return;
             }
-            if (res.statusCode !== 200){  //If request didn't error but response isn't status code 200.
+            if (res.statusCode !== 200){  // If request didn't error but response isn't status code 200.
                 callback({
+                    message: 'HTML Status Code Error ' + res.statusCode,
                     success: false,
-                    message: 'HTML Status Code Error ' + res.statusCode
                 });
                 return;
             }
@@ -32,13 +32,12 @@ export class Http {
             try {
                 console.log(body);
                 var parsed = JSON.parse(body);
-            }
-            catch(error){
+            } catch (error) {
                 console.log("Erreur la");
                 console.log(error);
                 return callback({
+                    message: error,
                     success: false,
-                    message: error
                 });
             }
 
