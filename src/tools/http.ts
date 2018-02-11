@@ -1,5 +1,5 @@
-import http from "request"
-import jsonReaderClass from './tools/jsonReader';
+import http from "request";
+import jsonReaderClass from './jsonReader';
 
 let json = jsonReaderClass('./conf/urls.json').data;
 

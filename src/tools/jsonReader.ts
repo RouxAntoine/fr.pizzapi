@@ -22,7 +22,7 @@ class jsonReader {
         let absFileName: string = path.join(__dirname, filePath);
         this.read(absFileName);
     }
-    
+
     /**
      * call this to read data again
      */
