@@ -2,11 +2,11 @@
     "name": "apidomino",
     "version": "1.0.0",
     "description": "",
-    "main": "dist/index.js",
+    "main": "dist/Index.js",
     "scripts": {
         "build": "concurrently 'tsc' 'webpack'",
         "lint": "tslint --config tslint.json --exclude='**/*.d.ts' --exclude='node_modules/**/*.ts' src/**/*.ts --force",
-        "run": "node dist/index.js",
+        "run": "node $npm_package_main",
         "build:clean": "rimraf dist",
         "typings:install": "typings install",
         "build:watch": "concurrently 'tsc -w' 'webpack -w'"
@@ -29,6 +29,7 @@
         "json-loader": "^0.5.7",
         "path": "^0.12.7",
         "pizzapi": "0.0.8",
+        "request": "^2.83.0",
         "typescript": "^2.7.1"
     },
     "devDependencies": {

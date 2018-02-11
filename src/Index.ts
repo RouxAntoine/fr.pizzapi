@@ -2,11 +2,9 @@ import { Http } from './tools/Http';
 import { Address } from './Address';
 import { Store } from './Store';
 import cheerio from 'cheerio';
-//import jsonReaderClass from './tools/JsonReader';
 import 'source-map-support/register';                    // permet le support dees source map avec node js
-
-//let json = jsonReaderClass("./conf/urls.json").data;
-//console.log(json);
+import * as json from './conf/urls.json';
+//import jsonReaderClass from './tools/JsonReader';
 
 export class App {
     public static run(): void {
@@ -24,7 +22,7 @@ export class App {
 
     public searchNearestStore(): Promise<string[]> {
         return new Promise<string[]>((resolve, reject) => {
-            let addressFind = "https://www.dominos.fr/trouver-son-dominos?SearchCriteria=${code}";//json.store.find;
+            let addressFind = json.store.find;
             let url = addressFind.replace(
                 "${code}",
                 encodeURI(

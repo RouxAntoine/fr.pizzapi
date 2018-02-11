@@ -1,7 +1,5 @@
+import * as json from '../conf/urls.json';
 import http from "request";
-//import jsonReaderClass from './jsonReader';
-
-//let json = jsonReaderClass('./conf/urls.json').data;
 
 export class Http {
 
@@ -10,8 +8,9 @@ export class Http {
             headers: {
                 'Referer': "",
             },
-            uri: url,
+            uri: url
         };
+
         http.get(requestBody, function (error, res, body) {
             if (error) {  // If request errored out.
                 console.log("Erreur ici");
