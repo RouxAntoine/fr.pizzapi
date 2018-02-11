@@ -1,5 +1,5 @@
-import http from "request";
 import * as json from '../conf/urls.json';
+import http from "request";
 
 export class Http {
 

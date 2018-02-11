@@ -2,7 +2,7 @@ import { Order, Address, Customer, Store, Track, Item, Util, Payment } from "piz
 import { Http } from './tools/Http';
 import 'source-map-support/register';                    // permet le support dees source map avec node js
 
-import * as json from './conf/urls.json'
+import * as json from './conf/urls.json';
 
 // let json = jsonReaderClass("./conf/urls.json").data;
 

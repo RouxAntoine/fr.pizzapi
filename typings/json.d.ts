@@ -1,4 +1,9 @@
 declare module "*.json" {
-    const value: any;
-    export default value;
+    export let referer: string;
+    export let track: string;
+
+    // export type store = object;
+    export let store: any;
+    // export type order = any;
+    export let order: any;
 }
