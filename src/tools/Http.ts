@@ -1,7 +1,5 @@
 import http from "request";
-import jsonReaderClass from './jsonReader';
-
-let json = jsonReaderClass('./conf/urls.json').data;
+import * as json from '../conf/urls.json';
 
 export class Http {
 

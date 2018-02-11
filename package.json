@@ -2,11 +2,11 @@
     "name": "apidomino",
     "version": "1.0.0",
     "description": "",
-    "main": "dist/index.js",
+    "main": "dist/Index.js",
     "scripts": {
         "build": "concurrently 'tsc' 'webpack'",
         "lint": "tslint --config tslint.json --exclude='**/*.d.ts' --exclude='node_modules/**/*.ts' src/**/*.ts --force",
-        "run": "node dist/index.js",
+        "run": "node $npm_package_main",
 
         "build:clean": "rimraf dist",
         "typings:install": "typings install",

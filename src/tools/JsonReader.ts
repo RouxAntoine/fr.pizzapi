@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { exists } from 'fs';
 
 /**
  * default timeout value 5 sec
@@ -19,7 +18,7 @@ class JsonReader {
      */
     constructor(filePath: string, timeout: number) {
         this.timeout = timeout;
-        let absFileName: string = path.join(__dirname, filePath);
+        let absFileName: string = path.join(__dirname, "..", filePath);
         this.read(absFileName);
     }
 
@@ -28,7 +27,7 @@ class JsonReader {
      */
     public read(absFileName: string) {
         this.start = new Date().getTime();
-        fs.readFile(absFileName,'utf8', (err, data) => this._data = data);
+        fs.readFile(absFileName, 'utf8', (err, data) => this._data = data);
     }
 
     /**
@@ -36,12 +35,14 @@ class JsonReader {
      * wait timeout or break
      */
     get data(): any {
-        while(new Date().getTime() <= this.start + (this.timeout * 1000)) {
-            if(this._data !== undefined) {
+        while (new Date().getTime() <= this.start + (this.timeout * 1000)) {
+            // console.log(this._data);
+
+            if (this._data !== undefined) {
                 break;
             }
         }
 
-        return (this._data === undefined)? {"error": `timeout ${this.timeout} exceed`} : JSON.parse(this._data);
+        return (this._data === undefined) ? {"error": `timeout ${this.timeout} exceed`} : JSON.parse(this._data);
     }
 }
