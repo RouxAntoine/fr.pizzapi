@@ -1,14 +1,14 @@
 import http from "request";
-import jsonReaderClass from './jsonReader';
+//import jsonReaderClass from './jsonReader';
 
-let json = jsonReaderClass('./conf/urls.json').data;
+//let json = jsonReaderClass('./conf/urls.json').data;
 
 export class Http {
 
     public get(url, callback): void {
         let requestBody = {
             headers: {
-                'Referer': json.referer,
+                'Referer': "",
             },
             uri: url,
         };
@@ -29,21 +29,9 @@ export class Http {
                 return;
             }
 
-            try {
-                console.log(body);
-                var parsed = JSON.parse(body);
-            } catch (error) {
-                console.log("Erreur la");
-                console.log(error);
-                return callback({
-                    message: error,
-                    success: false,
-                });
-            }
-
             return callback({
                 success: true,
-                result: parsed
+                result: body
             });
         });
     }

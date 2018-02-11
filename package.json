@@ -7,10 +7,8 @@
         "build": "concurrently 'tsc' 'webpack'",
         "lint": "tslint --config tslint.json --exclude='**/*.d.ts' --exclude='node_modules/**/*.ts' src/**/*.ts --force",
         "run": "node dist/index.js",
-
         "build:clean": "rimraf dist",
         "typings:install": "typings install",
-
         "build:watch": "concurrently 'tsc -w' 'webpack -w'"
     },
     "repository": {
@@ -24,13 +22,14 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "dominos": "^2.1.1",
-        "path": "^0.12.7",
+        "cheerio": "^1.0.0-rc.2",
         "concurrently": "^2.2.0",
+        "dominos": "^2.1.1",
         "file-loader": "^1.1.6",
         "json-loader": "^0.5.7",
-        "typescript": "^2.7.1",
-        "pizzapi": "0.0.8"
+        "path": "^0.12.7",
+        "pizzapi": "0.0.8",
+        "typescript": "^2.7.1"
     },
     "devDependencies": {
         "@types/node": "^9.4.5",

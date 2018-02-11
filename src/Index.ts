@@ -1,10 +1,12 @@
-import { Order, Address, Customer, Store, Track, Item, Util, Payment } from "pizzapi";
 import { Http } from './tools/Http';
-import jsonReaderClass from './tools/JsonReader';
+import { Address } from './Address';
+import { Store } from './Store';
+import cheerio from 'cheerio';
+//import jsonReaderClass from './tools/JsonReader';
 import 'source-map-support/register';                    // permet le support dees source map avec node js
 
-let json = jsonReaderClass("./conf/urls.json").data;
-console.log(json);
+//let json = jsonReaderClass("./conf/urls.json").data;
+//console.log(json);
 
 export class App {
     public static run(): void {
@@ -17,12 +19,12 @@ export class App {
 
     constructor(home: object) {
         this.home = home;
-        this.myAddress = new Address(home)
+        this.myAddress = new Address(home, 38, "Avenue Georges Pompidou")
     }
 
     public searchNearestStore(): Promise<string[]> {
         return new Promise<string[]>((resolve, reject) => {
-            let addressFind = json.store.find;
+            let addressFind = "https://www.dominos.fr/trouver-son-dominos?SearchCriteria=${code}";//json.store.find;
             let url = addressFind.replace(
                 "${code}",
                 encodeURI(
@@ -32,7 +34,15 @@ export class App {
             console.log(url);
             let http = new Http();
             http.get(url, function(res){
-                console.log(res);
+                let stores: Array<Store> = [];
+                let $ = cheerio.load(res);
+                $('.store-search-results').find('.store-information').each(function(i, element) {
+                    let name = $(this).find('h4').text();
+                    let id = $(this).find('a').next()['2']['attribs']['id'].replace( /^\D+/g, '');
+                    let store = new Store(id, "phone", "street", name);
+                    stores.push(store);
+                });
+                console.log(stores);
             });
         });
     }
@@ -47,8 +57,8 @@ let app = new App({
 
 app.searchNearestStore().then((tab) => {
     console.log("totoa");
-    console.log(json);
-    console.log(typeof json);
+    /*console.log(json);
+    console.log(typeof json);*/
     console.log(tab)
 }).catch((res) => {
     console.log(res);
