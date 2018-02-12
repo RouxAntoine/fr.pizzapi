@@ -25,10 +25,12 @@
         "cheerio": "^1.0.0-rc.2",
         "concurrently": "^2.2.0",
         "dominos": "^2.1.1",
+        "es6-template-strings": "^2.0.1",
         "file-loader": "^1.1.6",
         "json-loader": "^0.5.7",
         "path": "^0.12.7",
         "pizzapi": "0.0.8",
+        "tslib": "^1.9.0",
         "typescript": "^2.7.1"
     },
     "devDependencies": {
