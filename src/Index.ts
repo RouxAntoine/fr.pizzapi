@@ -27,10 +27,9 @@ export class App {
         let addressFind = json.store.find;
         let url = template(addressFind, {code: encodeURI("LYON")});
         console.log(url);
-        let http = new Http();
 
+        let http = new Http();
         let htmlNotParsed = await http.get(url);
-        // console.log("htmlNotParsed : ", htmlNotParsed);
 
         // parse le html et récupère une liste de store proche qui est ensuite retourné
         let stores: Array<Store> = [];
@@ -43,7 +42,6 @@ export class App {
             let store = new Store(id, phone, name);
             stores.push(store);
         });
-        console.log("stores : ", stores);
         return stores;
     }
 }

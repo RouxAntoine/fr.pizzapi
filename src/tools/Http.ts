@@ -21,13 +21,11 @@ export class Http {
                     let rawData = '';
                     res.on('data', (chunk) => { rawData += chunk; });
 
-                    return new Promise<string>((resolve2, reject2) => {
+                    return resolve(new Promise<string>((resolve2, reject2) => {
                         res.on('end', () => {
-                            console.log(rawData);
-
                             return resolve2(rawData);
                         });
-                    });
+                    }));
                 }
             });
 
