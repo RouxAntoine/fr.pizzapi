@@ -23,7 +23,7 @@ export class Http {
 
                     return new Promise<string>((resolve2, reject2) => {
                         res.on('end', () => {
-                            console.log(rawData);
+                            //console.log(rawData);
 
                             return resolve2(rawData);
                         });

@@ -29,8 +29,10 @@ export class App {
         console.log(url);
         let http = new Http();
 
+        console.log("cool")
         let htmlNotParsed = await http.get(url);
-        // console.log("htmlNotParsed : ", htmlNotParsed);
+        console.log("cool2")
+        console.log("htmlNotParsed : ", htmlNotParsed);
 
         // parse le html et récupère une liste de store proche qui est ensuite retourné
         let stores: Array<Store> = [];
