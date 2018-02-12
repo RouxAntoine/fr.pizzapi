@@ -1,37 +1,38 @@
 import * as json from '../conf/urls.json';
-import http from "request";
+import { get } from "https";
 
 export class Http {
+    public async get(url): Promise<string> {
+        const res = await this.getToPromise(url);
+        return res;
+    }
 
-    public get(url, callback): void {
-        let requestBody = {
-            headers: {
-                'Referer': "",
-            },
-            uri: url
-        };
+    private getToPromise(url: string): Promise<any> {
+        return new Promise((resolve, reject) => {
 
-        http.get(requestBody, function (error, res, body) {
-            if (error) {  // If request errored out.
-                console.log("Erreur ici");
-                callback({
-                    message: error,
-                    success: false,
-                });
-                return;
-            }
-            if (res.statusCode !== 200){  // If request didn't error but response isn't status code 200.
-                callback({
-                    message: 'HTML Status Code Error ' + res.statusCode,
-                    success: false,
-                });
-                return;
-            }
+            get(url, (res) => {
+                const { statusCode } = res;
 
-            return callback({
-                success: true,
-                result: body
+                if (statusCode !== 200) {
+                    res.resume();
+                    return reject(`Request error ${res}`);
+                } else {
+                    res.setEncoding('utf8');
+                    let rawData = '';
+                    res.on('data', (chunk) => { rawData += chunk; });
+
+                    return new Promise<string>((resolve2, reject2) => {
+                        res.on('end', () => {
+                            console.log(rawData);
+
+                            return resolve2(rawData);
+                        });
+                    });
+                }
             });
+
         });
     }
+
+
 }
