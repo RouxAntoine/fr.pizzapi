@@ -3,9 +3,9 @@
     "sourceUri": "www.dominos.fr/",
     "store": {
         "find": "https://www.dominos.fr/trouver-son-dominos?SearchCriteria=${code}",
-        "info": "https://www.dominos.fr/magasin/${storeID}",
-        "menu": "https://commande.dominos.fr/eStore/fr/ProductMenu"
+        "info": "https://www.dominos.fr/magasin/${storeID}"
     },
+    "menu": "http://pizza.dominos.fr/la-carte/nos-pizzas",
     "order": {
         "validate": "https://commande.dominos.fr/eStore/fr/Checkout",
         "price": "",

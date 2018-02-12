@@ -1,7 +1,7 @@
 import { Http } from './tools/Http';
 import { Address } from './Address';
 import { Store } from './Store';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import 'source-map-support/register';                    // permet le support dees source map avec node js
 import * as json from './conf/urls.json';
 //import jsonReaderClass from './tools/JsonReader';
@@ -29,7 +29,7 @@ export class App {
                     "LYON"
                 )
             );
-            console.log(url);
+            
             let http = new Http();
             http.get(url, function(res){
                 let stores: Array<Store> = [];
