@@ -1,5 +1,4 @@
 import { Http } from './tools/Http';
-import { Address } from './Address';
 import { Store } from './Store';
 import { Pizza } from './Pizza';
 import * as cheerio from 'cheerio';
@@ -17,11 +16,9 @@ export class App {
     }
 
     private home: object;
-    private myAddress: Address;
 
     constructor(home: object) {
         this.home = home;
-        this.myAddress = new Address(home, 38, "Avenue Georges Pompidou")
     }
 
     public async searchNearestStore(): Promise<Array<Store>> {
