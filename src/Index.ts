@@ -21,9 +21,13 @@ export class App {
         this.home = home;
     }
 
-    public async searchNearestStore(): Promise<Array<Store>> {
+    /**
+     * @param : code postal / ville dans laquelle chercher des magasins
+     * @returns : liste de magasins dans la commune / ville
+     */
+    public async searchNearestStore(postalCode): Promise<Array<Store>> {
         let addressFind = json.store.find;
-        let url = template(addressFind, {code: encodeURI("LYON")});
+        let url = template(addressFind, {code: encodeURI(postalCode)});
         console.log(url);
 
         let http = new Http();
@@ -43,6 +47,9 @@ export class App {
         return stores;
     };
 
+    /**
+     * @returns : liste de pizzas achetables en magasin
+     */
     public async getMenu(): Promise<Array<Pizza>> {
         let addressFind = json.store.menu;
         let url = template(addressFind, {code: encodeURI("LYON")});
@@ -64,6 +71,34 @@ export class App {
         });
         return pizzas;
     };
+
+    /**
+     * @param : numéro de rue, nom de la rue, code postal
+     * @returns : true si OK, false si l'adresse n'est pas dans la zone de livraison
+     */
+    public async setDeliveryAddress(num: number, street: string, postalCode: number): Promise<boolean> {
+        //TODO: Enregistre et vérifie l'adresse de l'utilisateur, indique si Dominos peut livrer ici
+        return false;
+    };    
+
+    /**
+     * @param : id du magasin
+     * @returns : json des infos du magasin
+     */
+    public async getStoreInfo(id: number): Promise<string> {
+        //TODO: Enregistre et vérifie l'adresse de l'utilisateur, indique si Dominos peut livrer ici
+        return "";
+    };
+
+    /**
+     * @description : valide la commande
+     * @param : id du magasin
+     * @returns : json des infos du magasin
+     */
+    public async order(pizzas: Array<Pizza>): Promise<string> {
+        //TODO: Enregistre et vérifie l'adresse de l'utilisateur, indique si Dominos peut livrer ici
+        return "";
+    };
 }
 
 let app = new App({
@@ -73,19 +108,19 @@ let app = new App({
     Street: "11 rue maryse bastie",
 });
 
-/*
-app.searchNearestStore().then(tabNearestStore => {
+app.searchNearestStore("LYON").then(tabNearestStore => {
     console.log("tabNearestStore : ", tabNearestStore);
 }).catch((error) => {
     console.log("error searchNearestStore : ", error);
 });
-*/
 
+/*
 app.getMenu().then(tabPizzas => {
     console.log("tabPizzas : ", tabPizzas);
 }).catch((error) => {
     console.log("error getMenu : ", error);
 });
+*/
 
 // for test
 App.run();
