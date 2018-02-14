@@ -1,6 +1,7 @@
 import * as json from '../conf/urls.json';
 import { get } from "https";
 
+
 export class Http {
     public async get(url: string, cookies?: object): Promise<string> {
         const res = await this.getToPromise(url, cookies);

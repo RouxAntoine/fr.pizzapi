@@ -25,27 +25,23 @@ export class App {
      * @param : code postal / ville dans laquelle chercher des magasins
      * @returns : liste de magasins dans la commune / ville
      */
-    public async searchNearestStore(postalCode): Promise<Array<Store>> {
+    public async searchNearestStore(postalCode: string): Promise<Array<Store>> {
         let addressFind = json.store.find;
         let url = template(addressFind, {code: encodeURI(postalCode)});
         console.log(url);
 
         let http = new Http();
-        let htmlNotParsed = await http.get(url);
+        let resJson = await http.get(url);
 
-        // parse le html et récupère une liste de store proche qui est ensuite retourné
+        // parse le json et récupère une liste de store proche qui est ensuite retourné
         let stores: Array<Store> = [];
-        let $ = cheerio.load(htmlNotParsed);
-        $('.store-search-results').find('.store-information').each(function(i, element) {
-            let name = $(this).find('h4').text().replace( /\s/g, '');
-            let id: number = $(this).find('a').next()['2']['attribs']['id'].replace( /^\D+/g, '');
-            let phone = $(this).find('a')['2']['attribs']['href'].replace( /^\D+/g, '').replace( /\s/g, '');
-
-            let store = new Store(id, phone, name);
-            stores.push(store);
-        });
+        
+        console.log(resJson)
+        //stores.push(store);
+        
         return stores;
     };
+
 
     /**
      * @returns : liste de pizzas achetables en magasin
@@ -121,11 +117,11 @@ let app = new App({
     Street: "11 rue maryse bastie",
 });
 
-// app.searchNearestStore("LYON").then(tabNearestStore => {
-//     console.log("tabNearestStore : ", tabNearestStore);
-// }).catch((error) => {
-//     console.log("error searchNearestStore : ", error);
-// });
+app.searchNearestStore("LYON").then(tabNearestStore => {
+    console.log("tabNearestStore : ", tabNearestStore);
+}).catch((error) => {
+    console.log("error searchNearestStore : ", error);
+});
 
 // app.getMenu().then(tabPizzas => {
 //     console.log("tabPizzas : ", tabPizzas);
