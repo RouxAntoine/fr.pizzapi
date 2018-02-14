@@ -49,23 +49,36 @@ export class App {
 
     /**
      * @returns : liste de pizzas achetables en magasin
+     * Le prix n'est récupéré que si un store est envoyé en cookie (paramètre)
      */
-    public async getMenu(): Promise<Array<Pizza>> {
-        let addressFind = json.store.menu;
-        let url = template(addressFind, {code: encodeURI("LYON")});
-        console.log(url);
+    public async getMenu(store?: Store): Promise<Array<Pizza>> {
+        let headers: {[key: string]: any} = {};
+        if (store !== undefined) {
+            headers.preferredStore = store.toCookieHeaders();
+        }
 
         let http = new Http();
-        let htmlNotParsed = await http.get(url);
+        let htmlNotParsed = await http.get(json.store.menu, headers);
 
         // parse le html et récupère une liste des pizzas commandables
         let pizzas: Array<Pizza> = [];
         let $ = cheerio.load(htmlNotParsed);
         $('.at-product-menu').find('.product-container').each(function(i, element) {
-            console.log();
-            let txt: string = $(this).find('.prod-info').text();
+            let $info: any = $(element).find('.prod-info');
+
+            let txt: string = $info.text();
             let name: string = txt.replace( /\s\s/g, '').replace( /^\s/g, '').replace( /\s$/g, '');
+
             //Comment on récupère ce foutu prix ?!
+            // il faut envoyé deux cookie avec les formats suivants
+            // 
+            // preferredStore: {"countryCode":"FR","storeNo":31740,"name":"LYON 8 - LUMIÃRE MONPLAISIR","state":"FR","onlineOrdering":true,"postalcode":69008}
+            // StoreNo: 31740
+
+            let $productPrize: any = $info.find('.product-price');
+            if (i === 1) {
+                console.log($productPrize.text());
+            }
             let price: number = 0;
             pizzas.push(new Pizza(name, price));
         });
@@ -79,7 +92,7 @@ export class App {
     public async setDeliveryAddress(num: number, street: string, postalCode: number): Promise<boolean> {
         //TODO: Enregistre et vérifie l'adresse de l'utilisateur, indique si Dominos peut livrer ici
         return false;
-    };    
+    };
 
     /**
      * @param : id du magasin
@@ -108,19 +121,17 @@ let app = new App({
     Street: "11 rue maryse bastie",
 });
 
-app.searchNearestStore("LYON").then(tabNearestStore => {
-    console.log("tabNearestStore : ", tabNearestStore);
-}).catch((error) => {
-    console.log("error searchNearestStore : ", error);
-});
+// app.searchNearestStore("LYON").then(tabNearestStore => {
+//     console.log("tabNearestStore : ", tabNearestStore);
+// }).catch((error) => {
+//     console.log("error searchNearestStore : ", error);
+// });
 
-/*
-app.getMenu().then(tabPizzas => {
-    console.log("tabPizzas : ", tabPizzas);
-}).catch((error) => {
-    console.log("error getMenu : ", error);
-});
-*/
+// app.getMenu().then(tabPizzas => {
+//     console.log("tabPizzas : ", tabPizzas);
+// }).catch((error) => {
+//     console.log("error getMenu : ", error);
+// });
 
 // for test
 App.run();
