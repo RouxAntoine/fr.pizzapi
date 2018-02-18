@@ -2,7 +2,7 @@
     "referer": "https://commande.dominos.fr/eStore/fr/CustomerDetails/Delivery",
     "sourceUri": "www.dominos.fr/",
     "store": {
-        "find": "https://www.dominos.fr/trouver-son-dominos?SearchCriteria=${code}",
+        "find": "https://www.dominos.fr/dynamicstoresearchapi/getstores/30/${code}",
         "info": "https://www.dominos.fr/magasin/${storeID}",
         "menu": "https://www.dominos.fr/la-carte/nos-pizzas"
     },
