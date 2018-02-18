@@ -1,5 +1,6 @@
 curl "https://www.dominos.fr/dynamicstoresearchapi/getstores/30/lyon"
 
+curl 'https://www.dominos.fr/dynamicstoresearchapi/getstores/30/lyon' -H 'Host: www.dominos.fr' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0' -H 'Accept: */*' -H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'Referer: https://www.dominos.fr/la-carte' -H 'X-Requested-With: XMLHttpRequest' -H 'Cookie: ASP.NET_SessionId=zjh32zgl1s5irv4fhakexvss; AllowCookies=2' -H 'DNT: 1' -H 'Connection: keep-alive' -H 'Pragma: no-cache' -H 'Cache-Control: no-cache'
 
 
 %7B%22countryCode%22%3A%22FR%22%2C%22storeNo%22%3A31740%2C%22name%22%3A%22LYON%208%20-%20LUMI%C3%88RE%20MONPLAISIR%22%2C%22state%22%3A%22FR%22%2C%22onlineOrdering%22%3Atrue%2C%22postalcode%22%3A69008%7D
@@ -10,6 +11,13 @@ curl https://www.dominos.fr/la-carte -H 'Cookie: preferredStore=%7B%22countryCod
 curl https://www.dominos.fr/la-carte -H 'Cookie: preferredStore=%7B%22countryCode%22:%22FR%22,%22storeNo%22:31740,%22name%22:%22LYON%208%20-%20LUMI%C3%88RE%20MONPLAISIR%22,%22state%22:%22FR%22,%22onlineOrdering%22:true,%22postalcode%22:69008%7D' | grep product-price
 cookie required 
 {"countryCode":"FR","storeNo":31740,"name":"LYON 8 - LUMIÈRE MONPLAISIR","state":"FR","onlineOrdering":true,"postalcode":69008}
+
+
+test
+curl https://www.dominos.fr/la-carte -H "Cookie: preferredStore=%7B%22countryCode%22:%22FR%22,%22name%22:%22LYON%208%20-%20MERMOZ%22,%22onlineOrdering%22:true,%22postalcode%22:%2269008%22,%22state%22:%22FRANCE%22,%22storeNo%22:31978%7D"  | grep product-price
+marche
+curl https://www.dominos.fr/la-carte -H 'Cookie: preferredStore=%7B%22countryCode%22:%22FR%22,%22storeNo%22:31740,%22name%22:%22LYON%208%20-%20LUMI%C3%88RE%20MONPLAISIR%22,%22state%22:%22FR%22,%22onlineOrdering%22:true,%22postalcode%22:69008%7D' | grep product-price
+
 
 {
 	"ContentEncoding": null,

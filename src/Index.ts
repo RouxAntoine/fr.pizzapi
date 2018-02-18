@@ -1,5 +1,5 @@
 import { Http } from './tools/Http';
-import { Store } from './Store';
+import {IStore, Store} from './Store';
 import { Pizza } from './Pizza';
 import * as cheerio from 'cheerio';
 import 'source-map-support/register';                    // permet le support dees source map avec node js
@@ -25,20 +25,20 @@ export class App {
      * @param : code postal / ville dans laquelle chercher des magasins
      * @returns : liste de magasins dans la commune / ville
      */
-    public async searchNearestStore(postalCode: string): Promise<Array<Store>> {
+    public async searchNearestStore(postalCode: string): Promise<Array<IStore>> {
         let addressFind = json.store.find;
         let url = template(addressFind, {code: encodeURI(postalCode)});
         console.log(url);
 
-        let http = new Http();
-        let resJson = await http.get(url);
+        let http: Http = new Http();
+        let storesAsJson: any = await http.get(url);
 
-        // parse le json et récupère une liste de store proche qui est ensuite retourné
-        let stores: Array<Store> = [];
-        
-        console.log(resJson)
-        //stores.push(store);
-        
+        // parse le html et récupère une liste de store proche qui est ensuite retourné
+        let stores: Array<IStore> = [];
+        storesAsJson.Data.forEach(storeAsJson => {
+            let store = Store.fromJson(storeAsJson);
+            stores.push(store);
+        });
         return stores;
     };
 
@@ -48,13 +48,13 @@ export class App {
      * Le prix n'est récupéré que si un store est envoyé en cookie (paramètre)
      */
     public async getMenu(store?: Store): Promise<Array<Pizza>> {
-        let headers: {[key: string]: any} = {};
+        let cookies: Map<string, any> = new Map();
         if (store !== undefined) {
-            headers.preferredStore = store.toCookieHeaders();
+            cookies["preferredStore"] = store.toCookieHeadersFormat();
         }
 
         let http = new Http();
-        let htmlNotParsed = await http.get(json.store.menu, headers);
+        let htmlNotParsed = await http.get(json.store.menu, cookies);
 
         // parse le html et récupère une liste des pizzas commandables
         let pizzas: Array<Pizza> = [];
@@ -62,21 +62,12 @@ export class App {
         $('.at-product-menu').find('.product-container').each(function(i, element) {
             let $info: any = $(element).find('.prod-info');
 
-            let txt: string = $info.text();
-            let name: string = txt.replace( /\s\s/g, '').replace( /^\s/g, '').replace( /\s$/g, '');
+            let name = $info.find('.menu-entry').text().trim();
+            let productPrize: string = $info.find('.product-price').text().trim();
 
-            //Comment on récupère ce foutu prix ?!
-            // il faut envoyé deux cookie avec les formats suivants
-            // 
-            // preferredStore: {"countryCode":"FR","storeNo":31740,"name":"LYON 8 - LUMIÃRE MONPLAISIR","state":"FR","onlineOrdering":true,"postalcode":69008}
-            // StoreNo: 31740
+            let arrayPrice:string[] = (productPrize.match(/([0-9]*,[0-9]*)/g) || []).map(p => p.replace(',', '.'));
 
-            let $productPrize: any = $info.find('.product-price');
-            if (i === 1) {
-                console.log($productPrize.text());
-            }
-            let price: number = 0;
-            pizzas.push(new Pizza(name, price));
+            pizzas.push(new Pizza(name, Number(arrayPrice[1]), Number(arrayPrice[0]) ) );
         });
         return pizzas;
     };
@@ -118,16 +109,21 @@ let app = new App({
 });
 
 app.searchNearestStore("LYON").then(tabNearestStore => {
-    console.log("tabNearestStore : ", tabNearestStore);
+    // console.log("tabNearestStore : ", tabNearestStore);
+
+    let lyon8 = tabNearestStore.filter((store: IStore) => { return store.storeNum === 31978})[0];
+    // console.log(lyon8);
+
+    app.getMenu(lyon8).then(tabPizzas => {
+        console.log("tabPizzas : ", tabPizzas);
+    }).catch((error) => {
+        console.log("error getMenu : ", error);
+    });
+
 }).catch((error) => {
     console.log("error searchNearestStore : ", error);
 });
 
-// app.getMenu().then(tabPizzas => {
-//     console.log("tabPizzas : ", tabPizzas);
-// }).catch((error) => {
-//     console.log("error getMenu : ", error);
-// });
 
 // for test
 App.run();
