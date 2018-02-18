@@ -16,5 +16,5 @@ export class Address {
     public async setDeliveryAddress(num: number, street: string, postalCode: number): Promise<boolean> {
         //TODO: Enregistre et vérifie l'adresse de l'utilisateur, indique si Dominos peut livrer ici
         return false;
-    };    
+    };
 }
