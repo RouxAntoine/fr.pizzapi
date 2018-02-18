@@ -61,24 +61,12 @@ export class App {
         $('.at-product-menu').find('.product-container').each(function(i, element) {
             let $info: any = $(element).find('.prod-info');
 
-            let name = $info.find('.menu-entry').text();
-            // let txt: string = $info.text();
-            // console.log(`txt : ${txt}`);
-            // let name: string = txt.replace( /\s\s/g, '').replace( /^\s/g, '').replace( /\s$/g, '');
-            console.log(`name : ${name}`);
+            let name = $info.find('.menu-entry').text().trim();
+            let productPrize: string = $info.find('.product-price').text().trim();
 
-            //Comment on récupère ce foutu prix ?!
-            // il faut envoyé deux cookie avec les formats suivants
-            // 
-            // preferredStore: {"countryCode":"FR","storeNo":31740,"name":"LYON 8 - LUMIÃRE MONPLAISIR","state":"FR","onlineOrdering":true,"postalcode":69008}
-            // StoreNo: 31740
+            let arrayPrice:string[] = (productPrize.match(/([0-9]*,[0-9]*)/g) || []).map(p => p.replace(',', '.'));
 
-            let $productPrize: any = $info.find('.product-price');
-            console.log(`prix : ${$productPrize.text()}`);
-            let price: number = 0;
-
-
-            pizzas.push(new Pizza(name, price));
+            pizzas.push(new Pizza(name, Number(arrayPrice[1]), Number(arrayPrice[0]) ) );
         });
         return pizzas;
     };

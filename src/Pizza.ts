@@ -1,3 +1,3 @@
 export class Pizza {
-    constructor(private name: string, private price: number) {}
+    constructor(public readonly name: string, public readonly deliveryPrice?: number, public readonly takeAwayPrice?: number) {}
 }
