@@ -69,6 +69,10 @@ export class Address {
                 }
             }
         }
+        if(found){
+            let res: any = await http.post(json.order.setCode, {"postalCode": String(this.codePostal)}, cookie);
+            console.log(res);
+        }
         return found;
     };
 }

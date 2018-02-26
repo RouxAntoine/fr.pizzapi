@@ -5,7 +5,12 @@ export class Http {
     public async get(url: string, cookies?: Map<string, any>, ...headers: [string, number][]): Promise<any> {
         // console.log(JSON.stringify(cookies));
         // console.log(JSON.stringify(headers));
-        const res = await this.getToPromise(url, cookies, ...headers);
+        const res = await this.toPromise(url, undefined, cookies, ...headers);
+        return res;
+    }
+
+    public async post(url: string, data?: any, cookies?: Map<string, any>, ...headers: [string, number][]): Promise<any> {
+        const res = await this.toPromise(url, data, cookies, ...headers);
         return res;
     }
 
@@ -18,16 +23,27 @@ export class Http {
      * @param {[string , number]} headers
      * @returns {Promise<any>}
      */
-    private getToPromise(url: string, cookies?: Map<string, any>, ...headers: [string, number][]): Promise<any> {
+    private toPromise(url: string, data?: any, cookies?: Map<string, any>, ...headers: [string, number][]): Promise<any> {
+        let meth: String = "GET";
+        let form: any = {};
+        if(data != undefined){
+            meth = "POST";
+            form = {
+                search: data.postalCode,
+                submit: 'submit-value'
+            }
+        }
+        
         let urlObj: URL = new URL(url);
 
         const options: { [key: string]: any} =
             {
                 headers: { "Cookie": "" },
-                hostname: urlObj.hostname,
-                method: 'GET',
-                path: urlObj.pathname + urlObj.search,
-                port: urlObj.port,
+                hostname:   urlObj.hostname,
+                method:     meth,
+                path:       urlObj.pathname + urlObj.search,
+                port:       urlObj.port,
+                formData:   form
             };
 
         if(headers !== undefined) {
