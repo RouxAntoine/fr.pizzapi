@@ -7,6 +7,7 @@
         "menu": "https://www.dominos.fr/la-carte/nos-pizzas"
     },
     "order": {
+        "addressConfirm" : "https://commande.dominos.fr/eStore/fr/DominosApi/GetStreets?suburb=&postCode=${code}&name=${street}&hasPostCodeBeenSelected=true",
         "validate": "https://commande.dominos.fr/eStore/fr/Checkout",
         "price": "",
         "place": ""

@@ -1,12 +1,10 @@
 import { get } from "https";
 import {URL} from 'url';
 
-
 export class Http {
     public async get(url: string, cookies?: Map<string, any>, ...headers: [string, number][]): Promise<any> {
         // console.log(JSON.stringify(cookies));
         // console.log(JSON.stringify(headers));
-
         const res = await this.getToPromise(url, cookies, ...headers);
         return res;
     }
@@ -25,10 +23,10 @@ export class Http {
 
         const options: { [key: string]: any} =
             {
-                headers: { Cookie: "" },
+                headers: { "Cookie": "" },
                 hostname: urlObj.hostname,
                 method: 'GET',
-                path: urlObj.pathname,
+                path: urlObj.pathname + urlObj.search,
                 port: urlObj.port,
             };
 
