@@ -28,10 +28,7 @@ export class Http {
         let form: any = {};
         if(data != undefined){
             meth = "POST";
-            form = {
-                search: data.postalCode,
-                submit: 'submit-value'
-            }
+            form = data;
         }
         
         let urlObj: URL = new URL(url);
@@ -68,15 +65,20 @@ export class Http {
                 }
             });
         }
-
+        
         return new Promise((resolve, reject) => {
             get(options, (res) => {
                 const { statusCode, headers } = res;
 
+                // Domino's website return 302 to accept a POST request without any other return
+                if(data != undefined && statusCode === 302){
+                    return resolve(true);
+                }
+                
                 // deal with error request
                 if (statusCode !== 200) {
                     res.resume();
-                    return reject(`Request error ${res}`);
+                    return reject(`Request error ` + statusCode + ` ${res}`);
                 }
 
                 res.setEncoding('utf8');

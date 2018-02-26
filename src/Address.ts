@@ -38,6 +38,7 @@ export class Address {
         public codePostal: number,
         public streetName: string,
         public department?: string,
+        public suburb?: string,
         public state?: string,
         public fullAddress: string = `${streetNum} ${streetName}, ${codePostal} ${department}, FRANCE`
     ) {}
@@ -64,14 +65,23 @@ export class Address {
             for(let i of res){
                 if(this.streetName.toUpperCase() == i["Name"] && this.codePostal == Number(i["PostCode"])){
                     this.streetName = i["Name"];
+                    this.suburb = i["Suburb"];
                     found = true;
                     break;
                 }
             }
         }
         if(found){
-            let res: any = await http.post(json.order.setCode, {"postalCode": String(this.codePostal)}, cookie);
-            console.log(res);
+            let j: any = {Customer: {
+                PostCode :              String(this.codePostal),
+                State :         	    "FR",
+                Street :                String(this.streetName),
+                StreetNo :              String(this.streetNum),
+                StreetSearchString :    String(this.streetName),
+                Suburb :                String(this.suburb),
+                SuburbSearchString :    String(this.codePostal) + " " + String(this.suburb)
+            }};
+            let res: any = await http.post(json.order.setAddress, j, cookie);
         }
         return found;
     };
