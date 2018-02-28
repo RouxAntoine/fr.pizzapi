@@ -78,11 +78,18 @@ export class App {
      * @param : numéro de rue, nom de la rue, code postal
      * @returns : true si OK, false si l'adresse n'est pas dans la zone de livraison
      */
-    public async setDeliveryAddress(num: number, street: string, postalCode: number, store: Store): Promise<boolean> {
+    public async setDeliveryAddress(num: number, street: string, postalCode: number, suburb: string, store: Store): Promise<boolean> {
         let cookies: Map<string, any> = new Map();
         cookies["preferredStore"] = store.toCookieHeadersFormat();
         let myAddress: Address = new Address(num, postalCode, street);
-        return myAddress.canDeliver(cookies);
+        if(myAddress.canDeliver()){
+            cookies["CV-URL"] = myAddress.toCookieHeadersFormat();
+            cookies["CV-StorId"] = store.storeNum
+            cookies["CV-StorName"] = store.name
+            myAddress.setDeliveryAdress(cookies);
+            return true;
+        }
+        return false;
     };
 
     /**
@@ -125,7 +132,7 @@ app.searchNearestStore("LYON").then(tabNearestStore => {
         console.log("error getMenu : ", error);
     });
     */
-    app.setDeliveryAddress(38, "AVENUE GEORGES POMPIDOU", 69003, lyon8).then(result => {
+    app.setDeliveryAddress(38, "AVENUE GEORGES POMPIDOU", 69003, "LYON", lyon8).then(result => {
         console.log("can deliver : " + result);
     }).catch((error) => {
         console.log("error setDelivery : ", error);
@@ -137,3 +144,17 @@ app.searchNearestStore("LYON").then(tabNearestStore => {
 
 // for test
 App.run();
+
+/*
+
+POST - https://commande.dominos.fr/eStore/fr/Checkout/Submit
+
+Customer.AcceptedTsAndCs	false
+Customer.DeliveryInstructions	ATTENTION+:+Ceci+est+une+erreur+de+commande,+ne+pas+livrer+svp
+Customer.DontWantToReciveOffers	true
+Customer.Email	me@fakemail.fr
+Customer.Name	AAAA
+Customer.Phone	090876543
+Customer.State	FR
+
+*/

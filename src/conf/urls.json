@@ -11,8 +11,9 @@
         "validate": "https://commande.dominos.fr/eStore/fr/Checkout",
         "setAddress": "https://commande.dominos.fr/eStore/fr/CustomerDetails/SpecifyDeliveryAddressWithCustomerDetails",
         "addToCart": "https://commande.dominos.fr/eStore/fr/Product/AddToOrder?timestamp=${timestamp}",
-        "price": "",
-        "place": ""
+        "removeFromCart": "https://commande.dominos.fr/eStore/fr/Basket/RemoveProduct?orderItemId=${numItem}&timestamp=${timestamp}",
+        "voucher": "https://commande.dominos.fr/eStore/fr/Basket/ApplyVoucher?voucherCode=${voucher}&addFromVoucherBox=true",
+        "validate": "https://commande.dominos.fr/eStore/fr/Checkout/Submit"
     },
     "track": ""
 }

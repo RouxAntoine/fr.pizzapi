@@ -46,7 +46,7 @@ export class Store implements IStore {
     public address: Address;
     public location: GeoLocation;
 
-    // not implement for the moment
+    // not implemented for the moment
 
     // private ServiceMethods: { Pickup: true, Delivery: true, DineIn: false, Message: null };
     // private OpeningHours: null;
@@ -64,7 +64,7 @@ export class Store implements IStore {
         public readonly name: string) {}
 
     /**
-     * format utilisé dans le cookie 'preferredStore'
+     * used format for cookies 'preferredStore'
      * {"countryCode":"FR","storeNo":31740,"name":"LYON 8 - LUMIÈRE MONPLAISIR","state":"FR","onlineOrdering":true,"postalcode":69008}
      */
     public toCookieHeadersFormat(): any {
