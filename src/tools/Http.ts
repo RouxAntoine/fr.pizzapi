@@ -71,8 +71,10 @@ export class Http {
                 const { statusCode, headers } = res;
 
                 // Domino's website return 302 to accept a POST request without any other return
-                if(data != undefined && (statusCode === 302 || statusCode === 200)){
-                    console.log(res.headers);
+                if(data != undefined && (statusCode === 302)){
+                    if(statusCode === 302){
+                        console.log("code 302");
+                    }
                     return resolve(true);
                 }
                 

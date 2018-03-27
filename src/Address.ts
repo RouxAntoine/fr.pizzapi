@@ -102,7 +102,7 @@ export class Address {
         }};
 
         let res: any = await http.post(url, j, cookie);
-        console.log(cookie);
+        //console.log(cookie);
     }
 }
 
