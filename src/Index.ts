@@ -1,6 +1,6 @@
 import { Http } from './tools/Http';
-import {IStore, Store} from './Store';
-import { Pizza } from './Pizza';
+import {IStore, Store} from './models/Store';
+import { Pizza } from './models/Pizza';
 import * as cheerio from 'cheerio';
 import 'source-map-support/register';                    // permet le support dees source map avec node js
 import * as compile from 'es6-template-strings/compile';

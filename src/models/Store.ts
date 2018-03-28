@@ -2,9 +2,6 @@ import {Address} from "./Address";
 import {GeoLocation} from "./GeoLocation";
 
 export interface IStore {
-    toCookieHeadersFormat(): any;
-    onlineOrdering(): boolean;
-
     readonly storeNum: number;
     readonly phone: string;
     readonly name: string;
@@ -15,6 +12,9 @@ export interface IStore {
     description: string;
     address: Address;
     location: GeoLocation;
+
+    toCookieHeadersFormat(): any;
+    onlineOrdering(): boolean;
 }
 
 export class Store implements IStore {
@@ -79,7 +79,7 @@ export class Store implements IStore {
     }
 
     public onlineOrdering(): boolean {
-        if(this.orderingType.map((v) => v.toLowerCase()).includes("online")) {
+        if (this.orderingType.map((v) => v.toLowerCase()).includes("online")) {
             return true;
         }
         return false;

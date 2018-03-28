@@ -17,7 +17,7 @@ export class Address {
      * @param json
      * @returns {Address}
      */
-    static fromJson(json: any): Address {
+    public static fromJson(json: any): Address {
         let created = new Address(json.StreetNo, json.PostalCode, json.StreetName, json.Suburb);
         created.state = STATE_MAPPING[json.State];
         return created;
