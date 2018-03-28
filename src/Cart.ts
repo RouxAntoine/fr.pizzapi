@@ -6,20 +6,19 @@ import * as template from 'es6-template-strings';
 
 export class Cart {
 
-    constructor(
-    ) {}
+    constructor() {}
 
     /**
      * @description add an item (pizza, dessert or drink) to the cart
      */
-    public async addItem(cookie: any){
+    public async addItem(cookie: any) {
         let item: any = {
             primaryProduct: {
                 crusts:     [
                     {
-                        componentCode: "Crust.T", 
-                        quantity: 1
-                    }
+                        componentCode: "Crust.T",
+                        quantity: 1,
+                    },
                 ],
                 Portions:   [
                     {

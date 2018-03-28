@@ -27,7 +27,7 @@ export class App {
     }
 
     /**
-     * @param : code postal / ville dans laquelle chercher des magasins
+     * @param postalCode : code postal / ville dans laquelle chercher des magasins
      * @returns : liste de magasins dans la commune / ville
      */
     public async searchNearestStore(postalCode: string): Promise<Array<IStore>> {
@@ -118,7 +118,7 @@ export class App {
 
     public async initSession(): Promise<any>{
         let util: Util = new Util();
-        let cookie: any = util.initSession();
+        let cookie: any = Util.initSession();
         return cookie;
     }
 }

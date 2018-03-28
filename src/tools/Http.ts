@@ -5,7 +5,7 @@ export class Http {
     public async get(url: string, cookies?: Map<string, any>, ...headers: [string, number][]): Promise<any> {
         // console.log(JSON.stringify(cookies));
         // console.log(JSON.stringify(headers));
-        const res = await this.toPromise(url, undefined, cookies, ...headers);
+        const res = await this.toPromise(url, cookies, ...headers);
         return res;
     }
 
@@ -96,7 +96,7 @@ export class Http {
      * @param {[string , number]} headers
      * @returns {Promise<any>}
      */
-    private toPromise(url: string, data?: any, cookies?: Map<string, any>, ...headers: [string, number][]): Promise<any> {
+    private toPromise(url: string, cookies?: Map<string, any>, ...headers: [string, number][]): Promise<any> {
         let urlObj: URL = new URL(url);
 
         const options: { [key: string]: any} =

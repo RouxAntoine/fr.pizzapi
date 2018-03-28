@@ -7,6 +7,8 @@ import * as template from 'es6-template-strings';
 
 export class Address {
 
+    public http: Http;
+
     /**
      * construct Address object from json
      * private Address: {
@@ -41,7 +43,9 @@ export class Address {
         public suburb?: string,
         public state?: string,
         public fullAddress: string = `${streetNum} ${streetName}, ${codePostal} ${department}, FRANCE`
-    ) {}
+    ) {
+        this.http = new Http();
+    }
 
     /**
      * used format in the cookie
@@ -65,42 +69,42 @@ export class Address {
      * @param state
      */
     public async canDeliver(): Promise<boolean> {
-        let http: Http = new Http();
         let url: string = json.order.addressConfirm;
 
         url = url.replace('${code}', encodeURI(String(this.codePostal)))
                 .replace('${street}', encodeURI(this.streetName));
 
-        let res: any = await http.get(url);
-        let found: boolean = false;
+        let res: any = await this.http.get(url);
+
         if(res.length > 0){
             for(let i of res){
-                if(this.streetName.toUpperCase() == i["Name"] && this.codePostal == Number(i["PostCode"])){
+                if(this.streetName.toUpperCase() == i.Name && this.codePostal == Number(i["PostCode"])){
                     this.streetName = i["Name"];
                     this.suburb = i["Suburb"];
-                    found = true;
-                    break;
+
+                    return true;
                 }
             }
         }
-        return found;
+        return false;
     };
 
     public async setDeliveryAdress(cookie: Map<string, any>){
-        let http: Http = new Http();
         let url: string = json.order.setAddress;
         
-        let j: any = {Customer: {
-            PostCode :              String(this.codePostal),
-            State :         	    "FR",
-            Street :                String(this.streetName),
-            StreetNo :              String(this.streetNum),
-            StreetSearchString :    String(this.streetName),
-            Suburb :                String(this.suburb),
-            SuburbSearchString :    String(this.codePostal) + " " + String(this.suburb)
-        }};
+        let postData: any = {
+            Customer: {
+                PostCode :              this.codePostal,
+                State :         	    "FR",
+                Street :                this.streetName,
+                StreetNo :              this.streetNum,
+                StreetSearchString :    this.streetName,
+                Suburb :                this.suburb,
+                SuburbSearchString :    `${this.codePostal} ${this.suburb}`
+            }
+        };
 
-        let res: any = await http.post(url, j, cookie);
+        let res: any = await this.http.post(url, postData, cookie);
         //console.log(cookie);
     }
 }
