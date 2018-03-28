@@ -12,7 +12,7 @@ export class Cart {
     /**
      * @description add an item (pizza, dessert or drink) to the cart
      */
-    public async addItem(){
+    public async addItem(cookie: any){
         let item: any = {
             primaryProduct: {
                 crusts:     [
@@ -49,11 +49,10 @@ export class Cart {
             },
             secondaryProduct: null
         };
-        let url: string = json.order.addToCart;
-        let http: Http = new Http();
-        let res: any = await http.post(url, item);
-        console.log(url);
-        console.log(res);
 
+        let url: string = json.order.addToCart;
+        url = url.replace('${timestamp}', encodeURI(String(1522182412178)))
+        let http: Http = new Http();
+        let res: any = await http.post(url, item, cookie);
     }
 }

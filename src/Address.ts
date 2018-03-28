@@ -89,7 +89,6 @@ export class Address {
     public async setDeliveryAdress(cookie: Map<string, any>){
         let http: Http = new Http();
         let url: string = json.order.setAddress;
-        console.log(url);
         
         let j: any = {Customer: {
             PostCode :              String(this.codePostal),

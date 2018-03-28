@@ -1,6 +1,8 @@
 import { Http } from './tools/Http';
 import {IStore, Store} from './Store';
+import { Util } from './Util';
 import { Pizza } from './Pizza';
+import { Cart } from './Cart';
 import * as cheerio from 'cheerio';
 import 'source-map-support/register';                    // permet le support dees source map avec node js
 import * as compile from 'es6-template-strings/compile';
@@ -78,20 +80,22 @@ export class App {
      * @param : numéro de rue, nom de la rue, code postal
      * @returns : true si OK, false si l'adresse n'est pas dans la zone de livraison
      */
-    public async setDeliveryAddress(num: number, street: string, postalCode: number, suburb: string, store: Store): Promise<boolean> {
-        let cookies: Map<string, any> = new Map();
-        cookies["preferredStore"] = store.toCookieHeadersFormat();
+    public async setDeliveryAddress(num: number, street: string, postalCode: number, suburb: string, store: Store, cookie: any): Promise<boolean> {
+        /*let cookies: Map<string, any> = new Map();
+        cookies["preferredStore"] = store.toCookieHeadersFormat();*/
         let myAddress: Address = new Address(num, postalCode, street);
         if(myAddress.canDeliver()){
-            cookies["CV-URL"] = myAddress.toCookieHeadersFormat();
-            cookies["CV-StorId"] = store.storeNum
-            cookies["CV-StorName"] = store.name
-            myAddress.setDeliveryAdress(cookies);
+            myAddress.setDeliveryAdress(cookie);
             return true;
         }
         return false;
     };
 
+    public async fillCart(cookie: any): Promise<boolean> {
+        let cart: Cart = new Cart();
+        cart.addItem(cookie);
+        return true;
+    }
     /**
      * @param : id du magasin
      * @returns : json des infos du magasin
@@ -110,6 +114,12 @@ export class App {
         //TODO: Enregistre et vérifie l'adresse de l'utilisateur, indique si Dominos peut livrer ici
         return "";
     };
+
+    public async initSession(): Promise<any>{
+        let util: Util = new Util();
+        let cookie: any = util.initSession();
+        return cookie;
+    }
 }
 
 let app = new App({
@@ -120,27 +130,40 @@ let app = new App({
 });
 
 
-app.searchNearestStore("LYON").then(tabNearestStore => {
-    // console.log("tabNearestStore : ", tabNearestStore);
-
-    let lyon8 = tabNearestStore.filter((store: IStore) => { return store.storeNum === 31978})[0];
-    // console.log(lyon8);
-    /*
-    app.getMenu(lyon8).then(tabPizzas => {
-        console.log("tabPizzas : ", tabPizzas);
+app.initSession().then(cookie => {
+    app.searchNearestStore("LYON").then(tabNearestStore => {
+        // console.log("tabNearestStore : ", tabNearestStore);
+    
+        let lyon8 = tabNearestStore.filter((store: IStore) => { return store.storeNum === 31978})[0];
+        // console.log(lyon8);
+        
+        /*
+        app.getMenu(lyon8).then(tabPizzas => {
+            console.log("tabPizzas : ", tabPizzas);
+        }).catch((error) => {
+            console.log("error getMenu : ", error);
+        });
+        */
+        
+        app.setDeliveryAddress(38, "AVENUE GEORGES POMPIDOU", 69003, "LYON", lyon8, cookie).then(result => {
+            console.log("can deliver : ");
+            app.fillCart(cookie).then(tabNearestStore => {
+                console.log("add pizza");
+            }).catch((error) => {
+                console.log("error fillCart : ", error);
+            });
+        }).catch((error) => {
+            console.log("error setDelivery : ", error);
+        });
+    
     }).catch((error) => {
-        console.log("error getMenu : ", error);
+        console.log("error searchNearestStore : ", error);
     });
-    */
-    app.setDeliveryAddress(38, "AVENUE GEORGES POMPIDOU", 69003, "LYON", lyon8).then(result => {
-        console.log("can deliver : " + result);
-    }).catch((error) => {
-        console.log("error setDelivery : ", error);
-    });
-
 }).catch((error) => {
-    console.log("error searchNearestStore : ", error);
-});
+    console.log("error initSession : ", error);
+})
+
+
 
 // for test
 App.run();
