@@ -3,7 +3,7 @@ import {IStore, Store} from './models/Store';
 import { Pizza } from './models/Pizza';
 import { Address } from './models/Address';
 import { Util } from './Util';
-import { Cart } from './Cart';
+import { Cart } from './models/Cart';
 
 import * as cheerio from 'cheerio';
 import 'source-map-support/register';                    // permet le support dees source map avec node js
