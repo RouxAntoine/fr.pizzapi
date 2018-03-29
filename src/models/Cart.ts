@@ -51,7 +51,9 @@ export class Cart {
         };
 
         let url: string = json.order.addToCart;
-        url = url.replace('${timestamp}', encodeURI(String(1522182412178)))
+        // +7200 temporary addition, need to remove that if the request works
+        // used to compensate a 2 hours gap between the Date and the real hour
+        url = url.replace('${timestamp}', encodeURI(String(Math.round((new Date().getTime() / 1000) + 7200))));
         let http: Http = new Http();
         let res: any = await http.post(url, item, cookie);
     }

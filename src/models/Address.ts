@@ -64,14 +64,14 @@ export class Address {
      * @param department
      * @param state
      */
-    public async canDeliver(): Promise<boolean> {
+    public async canDeliver(cookie: Map<string, any>): Promise<boolean> {
         let http: Http = new Http();
         let url: string = json.order.addressConfirm;
 
         url = url.replace('${code}', encodeURI(String(this.codePostal)))
                 .replace('${street}', encodeURI(this.streetName));
 
-        let res: any = await http.get(url);
+        let res: any = await http.get(url, cookie);
         let found: boolean = false;
         if(res.length > 0){
             for(let i of res){
@@ -96,12 +96,10 @@ export class Address {
             Street :                String(this.streetName),
             StreetNo :              String(this.streetNum),
             StreetSearchString :    String(this.streetName),
-            Suburb :                String(this.suburb),
+            Suburb :                this.suburb,
             SuburbSearchString :    String(this.codePostal) + " " + String(this.suburb)
         }};
-
         let res: any = await http.post(url, j, cookie);
-        //console.log(cookie);
     }
 }
 
