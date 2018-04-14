@@ -25,4 +25,15 @@ export class Util {
 
         return result;
     };
+
+    public mergeCookies(...cookiePieces: Map<string, any>[]): Map<string, any> {
+        let mergedCookie: Map<string, any> = new Map<string, any>();
+        cookiePieces.forEach((cookies) => {
+            Object.keys(cookies).forEach(function(key, index) {
+                let value: string = cookies[key];
+                mergedCookie[key] = value;
+            });
+        });
+        return mergedCookie;
+    }
 }

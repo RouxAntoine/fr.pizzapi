@@ -27,13 +27,21 @@ export class Cart {
                         productCode:    null,
                         Sauces: [
                             {
-                                componentCode: "Sauce.CFRAI",
+                                componentCode: "Sauce.TOMSC",
                                 quantity: 1
                             }
                         ],
                         toppings: [
                             {
-                                componentCode: "Topping.BACON",
+                                componentCode: "Topping.CHEVR",
+                                quantity: 1
+                            },
+                            {
+                                componentCode: "Topping.EMMEN",
+                                quantity: 1
+                            },
+                            {
+                                componentCode: "Topping.FOURM",
                                 quantity: 1
                             },
                             {
@@ -43,7 +51,7 @@ export class Cart {
                         ]
                     }
                 ],
-                productCode:        "PBCG",
+                productCode:        "P4FR",
                 productSizeCode:    "Pizza.Medium",
                 quantity:           1
             },
@@ -55,6 +63,7 @@ export class Cart {
         // used to compensate a 2 hours gap between the Date and the real hour
         url = url.replace('${timestamp}', encodeURI(String(Math.round((new Date().getTime() / 1000) + 7200))));
         let http: Http = new Http();
-        let res: any = await http.post(url, item, cookie);
+        console.log("ADD ITEM TO CART");
+        await http.postJSON(url, item, cookie);
     }
 }

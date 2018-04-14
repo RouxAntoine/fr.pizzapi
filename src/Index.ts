@@ -17,7 +17,7 @@ import * as json from './conf/urls.json';
 export class App {
     public static run(): void {
         // this.api
-        console.log("hello world !!!")
+        //console.log("hello world !!!")
     }
 
     private home: object;
@@ -33,7 +33,6 @@ export class App {
     public async searchNearestStore(postalCode: string): Promise<Array<IStore>> {
         let addressFind = json.store.find;
         let url = template(addressFind, {code: encodeURI(postalCode)});
-        console.log(url);
 
         let http: Http = new Http();
         let storesAsJson: any = await http.get(url);
@@ -86,7 +85,11 @@ export class App {
         return myAddress.canDeliver(cookie).then(result => {
             let b: boolean = false;
             if(result){
-                myAddress.setDeliveryAdress(cookie);
+                let util: Util = new Util();
+                let cookStore: Map<string, any> = store.toCookieHeadersFormat();
+                let cookAddress: Map<string, any> = myAddress.toCookieHeadersFormat();
+                let cookies : Map<string, any> = util.mergeCookies(cookie, cookStore, cookAddress);
+                myAddress.setDeliveryAdress(cookies);
                 b = true;
             }
             return b;
@@ -128,10 +131,10 @@ let app = new App({
 
 let util: Util = new Util();
 util.initSession().then(cookie =>{
-    app.searchNearestStore("LYON").then(tabNearestStore => {
+    app.searchNearestStore("69003 LYON").then(tabNearestStore => {
         
-        let lyon8 = tabNearestStore.filter((store: IStore) => { return store.storeNum === 31978})[0];
-       
+        //let lyon8 = tabNearestStore.filter((store: IStore) => { return store.storeNum === 31978})[0];
+        let first = tabNearestStore[0];
         /*
         app.getMenu(lyon8).then(tabPizzas => {
             console.log("tabPizzas : ", tabPizzas);
@@ -140,12 +143,16 @@ util.initSession().then(cookie =>{
         });
         */
         
-        app.setDeliveryAddress(38, "AVENUE GEORGES POMPIDOU", 69003, "LYON", lyon8, cookie).then(result => {
+        app.setDeliveryAddress(38, "AVENUE GEORGES POMPIDOU", 69003, "LYON", first, cookie).then(result => {
+
+
             app.fillCart(cookie).then(tabNearestStore => {
-                console.log("add pizza");
+                console.log("Ajouté !");
             }).catch((error) => {
                 console.log("error fillCart : ", error);
             });
+            
+            
         }).catch((error) => {
             console.log("error setDelivery : ", error);
         });

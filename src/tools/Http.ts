@@ -1,6 +1,8 @@
 import { get, request } from "https";
 import { Util } from "./Util";
-import {URL} from 'url';
+import { URL } from 'url';
+import { stringify } from 'querystring';
+import { start } from 'repl';
 
 export class Http {
     public async get(url: string, cookies?: Map<string, any>, ...headers: [string, number][]): Promise<any> {
@@ -12,20 +14,21 @@ export class Http {
 
     public async postGetCookie(url: string, data?: any, cookies?: Map<string, any>, ...headers: [string, number][]): Promise<any> {
         let meth: String = "POST";
-        let form: any = {};
-        if(data != undefined){
-            form = data;
-        }
-        
+        let postData: string = stringify(data);
+        //console.log(postData);
+
         let urlObj: URL = new URL(url);
         const options: { [key: string]: any} =
             {
-                headers: { Cookie: "" },
+                headers: { 
+                    Cookie: "", 
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Length': Buffer.byteLength(postData)
+                },
                 hostname:   urlObj.hostname,
                 method:     meth,
                 path:       urlObj.pathname + urlObj.search,
-                port:       urlObj.port,
-                formData:   form
+                port:       urlObj.port
             };
 
         if(headers !== undefined) {
@@ -33,13 +36,90 @@ export class Http {
                 options.headers[index] = value;
             });
         }
-        request(options, (res) => {
-            const { statusCode, headers } = res;
-            console.log(statusCode);
-            console.log(headers);
-            
-            return headers['set-cookie'];
-        }).end();
+
+        if (cookies !== undefined) {
+            Object.keys(cookies).forEach(function(key, index) {
+                let value:any = cookies[key];
+                if(typeof value === "object") {
+                    value = JSON.stringify(value);
+                }
+                else {
+                    value = value.toString();
+                }
+                options.headers.Cookie += `${key}=${encodeURI(value)}`;
+
+                if (index !== Object.keys(cookies).length) {
+                    options.headers.Cookie += ";";
+                }
+            });
+        }
+
+        return new Promise((resolve, reject) => {
+            let post_req: any = request(options, (res) => {
+                res.setEncoding('utf8');
+                const { statusCode, headers } = res;
+                let util: Util = new Util();
+                let cookie: Map<string, any> = util.parseCookies(res.headers['set-cookie']!);
+                resolve(cookie);
+            });
+            post_req.write(postData);
+            post_req.end();
+        });
+    }
+
+    public async postJSON(url: string, json?: any, cookies?: Map<string, any>, ...headers: [string, number][]) {
+        let meth: String = "POST";
+
+        let urlObj: URL = new URL(url);
+        json = JSON.stringify(json);
+        console.log(JSON.stringify(json));
+
+        const options: { [key: string]: any} =
+            {
+                headers: { 
+                    Cookie: "", 
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Length': Buffer.byteLength(json)
+                },
+                hostname:   urlObj.hostname,
+                method:     meth,
+                path:       urlObj.pathname + urlObj.search,
+                port:       urlObj.port
+            };
+
+        if(headers !== undefined) {
+            headers.forEach((value, index) => {
+                options.headers[index] = value;
+            });
+        }
+
+        if (cookies !== undefined) {
+            Object.keys(cookies).forEach(function(key, index) {
+                let value:any = cookies[key];
+                if(typeof value === "object") {
+                    value = JSON.stringify(value);
+                }
+                else {
+                    value = value.toString();
+                }
+                options.headers.Cookie += `${key}=${encodeURI(value)}`;
+
+                if (index !== Object.keys(cookies).length) {
+                    options.headers.Cookie += ";";
+                }
+            });
+        }
+
+        return new Promise((resolve, reject) => {
+            let post_req: any = request(options, (res) => {
+                res.setEncoding('utf8');
+                const { statusCode, headers } = res;
+                console.log("[HTTP][PostJSON] StatusCode : " + statusCode);
+                let util: Util = new Util();
+            });
+            post_req.write(json);
+            post_req.end();
+        });
     }
 
     public async getSession(url: string, cookies?: Map<string, any>, ...headers: [string, number][]): Promise<any> {
@@ -63,7 +143,7 @@ export class Http {
 
                 let util: Util = new Util();
                 res.setEncoding('utf8');
-                console.log("res.headers['set-cookie'] : ");
+                console.log(res.headers['set-cookie']!);
                 let cookie: Map<string, any> = util.parseCookies(res.headers['set-cookie']!);
                 resolve(cookie);
             });
@@ -112,14 +192,10 @@ export class Http {
             });
         }
         
-        console.log(options);
-        request(options, (response) => {
-            const { statusCode, headers } = response;
-            console.log(statusCode);
-            response.on('data', (d) => {
-                //process.stdout.write(d);
-            });
-        }).end();
+        let post_req: any = request(options, (response) => {});
+        console.log(form);
+        post_req.write(form);
+        post_req.end();
         //return res;
     }
 
@@ -195,7 +271,4 @@ export class Http {
             });
         });
     }
-
-    
-
 }

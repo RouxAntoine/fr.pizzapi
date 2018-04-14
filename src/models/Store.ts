@@ -67,6 +67,7 @@ export class Store implements IStore {
      * used format for cookies 'preferredStore'
      * {"countryCode":"FR","storeNo":31740,"name":"LYON 8 - LUMIÈRE MONPLAISIR","state":"FR","onlineOrdering":true,"postalcode":69008}
      */
+    /*
     public toCookieHeadersFormat(): any {
         return {
             countryCode: this.countryCode,
@@ -76,6 +77,14 @@ export class Store implements IStore {
             state: this.address.state,
             storeNo: this.storeNum,
         };
+    }
+    */
+    
+    public toCookieHeadersFormat(): Map<string, any> {
+        let r: Map<string, any> = new Map<string, any>();
+        r["CV-StorId"] = this.storeNum;
+        r["CV-StorName"] = this.name;
+        return r;
     }
 
     public onlineOrdering(): boolean {
