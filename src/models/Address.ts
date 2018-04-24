@@ -99,8 +99,6 @@ export class Address {
             'Customer.SuburbSearchString' :    String(this.codePostal) + " " + String(this.suburb)
         };
         let res: any = await http.postGetCookie(url, j, cookie);
-        console.log("SET DELIVERY ADDRESS");
-        console.log(res);
         return res;
     }
 }

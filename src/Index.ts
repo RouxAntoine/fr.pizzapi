@@ -4,6 +4,7 @@ import { Pizza } from './models/Pizza';
 import { Address } from './models/Address';
 import { Util } from './tools/Util';
 import { Cart } from './models/Cart';
+import { Customer } from './models/Customer';
 
 import * as cheerio from 'cheerio';
 import 'source-map-support/register';                    // permet le support dees source map avec node js
@@ -80,24 +81,26 @@ export class App {
      * @param : numéro de rue, nom de la rue, code postal
      * @returns : true si OK, false si l'adresse n'est pas dans la zone de livraison
      */
-    public async setDeliveryAddress(num: number, street: string, postalCode: number, suburb: string, store: Store, cookie: Map<string, any>): Promise<boolean> {
+    public async setDeliveryAddress(num: number, street: string, postalCode: number, suburb: string, store: Store, cookie: Map<string, any>): Promise<Map<string, any>> {
         let myAddress: Address = new Address(num, postalCode, street);
         return myAddress.canDeliver(cookie).then(result => {
-            let b: boolean = false;
+            let newCookie: Map<string, any> = new Map<string, any>();
             if(result){
                 let util: Util = new Util();
                 let cookStore: Map<string, any> = store.toCookieHeadersFormat();
                 let cookAddress: Map<string, any> = myAddress.toCookieHeadersFormat();
                 let cookies : Map<string, any> = util.mergeCookies(cookie, cookStore, cookAddress);
                 myAddress.setDeliveryAdress(cookies);
-                b = true;
+                newCookie = cookies;
             }
-            return b;
+            return newCookie;
         })
     };
 
-    public async fillCart(cookie: any): Promise<boolean> {
+    public async fillCart(pizzas: Array<Pizza>, cookie: any): Promise<boolean> {
         let cart: Cart = new Cart();
+        cart.addItem(cookie);
+        cart.addItem(cookie);
         cart.addItem(cookie);
         return true;
     }
@@ -112,12 +115,18 @@ export class App {
 
     /**
      * @description : valide la commande
-     * @param : id du magasin
-     * @returns : json des infos du magasin
+     * @param : informations du client, cookie du client
      */
-    public async order(pizzas: Array<Pizza>): Promise<string> {
-        //TODO: Enregistre et vérifie l'adresse de l'utilisateur, indique si Dominos peut livrer ici
-        return "";
+    public async order(customer: Customer, cookie: Map<string, any>, commentary: string) {
+        let http: Http = new Http();
+        let url: string = json.order.validate;
+
+        //BUG: Il manque les données du magasin dans le cookie !
+        let custObject: Object = customer.getObject();
+        custObject["Customer.AcceptedTsAndCs"] = '{0: true, 1: false}';
+        custObject["Customer.DeliveryInstructions"] = commentary;
+        console.log("ORDER");
+        console.log(await http.postGetCookie(url, custObject, cookie));
     };
 }
 
@@ -134,24 +143,24 @@ util.initSession().then(cookie =>{
     app.searchNearestStore("69003 LYON").then(tabNearestStore => {
         
         //let lyon8 = tabNearestStore.filter((store: IStore) => { return store.storeNum === 31978})[0];
-        let first = tabNearestStore[0];
-        /*
-        app.getMenu(lyon8).then(tabPizzas => {
-            console.log("tabPizzas : ", tabPizzas);
-        }).catch((error) => {
-            console.log("error getMenu : ", error);
-        });
-        */
-        
-        app.setDeliveryAddress(38, "AVENUE GEORGES POMPIDOU", 69003, "LYON", first, cookie).then(result => {
+        let first = tabNearestStore[0];        
 
-
-            app.fillCart(cookie).then(tabNearestStore => {
-                console.log("Ajouté !");
-            }).catch((error) => {
-                console.log("error fillCart : ", error);
-            });
+        app.setDeliveryAddress(38, "AVENUE GEORGES POMPIDOU", 69003, "LYON", first, cookie).then(transformedCookie => {
             
+            app.getMenu(first).then(tabPizzas => {
+                //console.log("tabPizzas : ", tabPizzas);
+                //BUG: il arrive que la requête retourne 302 au lieu de 200
+                //BUG: ne prend pas en compte les pizza en param pour ajouter un item au panier
+                app.fillCart(tabPizzas, transformedCookie).then(tabNearestStore => {
+                    //BUG: customer hardcodé
+                    let customer: Customer = new Customer("jean@jeanjean.fr", "jean", "0665769865");
+                    app.order(customer, transformedCookie, "NE PAS LIVRER SVP");
+                }).catch((error) => {
+                    console.log("error fillCart : ", error);
+                });
+            }).catch((error) => {
+                console.log("error getMenu : ", error);
+            });            
             
         }).catch((error) => {
             console.log("error setDelivery : ", error);

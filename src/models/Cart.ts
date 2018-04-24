@@ -51,7 +51,7 @@ export class Cart {
                         ]
                     }
                 ],
-                productCode:        "P4FR",
+                productCode:        "PCAS",
                 productSizeCode:    "Pizza.Medium",
                 quantity:           1
             },
@@ -59,11 +59,9 @@ export class Cart {
         };
 
         let url: string = json.order.addToCart;
-        // +7200 temporary addition, need to remove that if the request works
-        // used to compensate a 2 hours gap between the Date and the real hour
+        //+7200 is used to compensate a 2 hours gap between the Date and the real hour (UTC+2)
         url = url.replace('${timestamp}', encodeURI(String(Math.round((new Date().getTime() / 1000) + 7200))));
         let http: Http = new Http();
-        console.log("ADD ITEM TO CART");
         await http.postJSON(url, item, cookie);
     }
 }

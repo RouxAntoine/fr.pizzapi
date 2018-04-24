@@ -15,7 +15,8 @@ export class Http {
     public async postGetCookie(url: string, data?: any, cookies?: Map<string, any>, ...headers: [string, number][]): Promise<any> {
         let meth: String = "POST";
         let postData: string = stringify(data);
-        //console.log(postData);
+
+        console.log(postData);
 
         let urlObj: URL = new URL(url);
         const options: { [key: string]: any} =
@@ -54,11 +55,14 @@ export class Http {
             });
         }
 
+        console.log(options.headers.Cookie);
+
         return new Promise((resolve, reject) => {
             let post_req: any = request(options, (res) => {
                 res.setEncoding('utf8');
                 const { statusCode, headers } = res;
                 let util: Util = new Util();
+                console.log("[HTTP][PostGetCookie] StatusCode : " + statusCode);
                 let cookie: Map<string, any> = util.parseCookies(res.headers['set-cookie']!);
                 resolve(cookie);
             });
@@ -78,7 +82,7 @@ export class Http {
             {
                 headers: { 
                     Cookie: "", 
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                     'Content-Length': Buffer.byteLength(json)
                 },
                 hostname:   urlObj.hostname,
@@ -115,7 +119,6 @@ export class Http {
                 res.setEncoding('utf8');
                 const { statusCode, headers } = res;
                 console.log("[HTTP][PostJSON] StatusCode : " + statusCode);
-                let util: Util = new Util();
             });
             post_req.write(json);
             post_req.end();
@@ -143,7 +146,7 @@ export class Http {
 
                 let util: Util = new Util();
                 res.setEncoding('utf8');
-                console.log(res.headers['set-cookie']!);
+                //console.log(res.headers['set-cookie']!);
                 let cookie: Map<string, any> = util.parseCookies(res.headers['set-cookie']!);
                 resolve(cookie);
             });
