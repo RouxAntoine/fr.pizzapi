@@ -76,9 +76,10 @@ export class Address {
 
         let res: any = await this.http.get(url);
 
-        if(res.length > 0){
+        if(res.length > 0) {
             for(let i of res){
-                if(this.streetName.toUpperCase() == i.Name && this.codePostal == Number(i["PostCode"])){
+
+                if(this.streetName.toUpperCase() == i.Name && this.codePostal == Number(i.PostalCode)){
                     this.streetName = i["Name"];
                     this.suburb = i["Suburb"];
 
