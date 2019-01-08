@@ -1,0 +1,19 @@
+{
+    "referer": "https://commande.dominos.fr/eStore/fr/CustomerDetails/Delivery",
+    "sourceUri": "www.dominos.fr/",
+    "store": {
+        "find": "https://www.dominos.fr/dynamicstoresearchapi/getstores/30/${code}",
+        "info": "https://www.dominos.fr/magasin/${storeID}",
+        "menu": "https://www.dominos.fr/la-carte/nos-pizzas"
+    },
+    "order": {
+        "addressConfirm" : "https://commande.dominos.fr/eStore/fr/DominosApi/GetStreets?suburb=&postCode=${code}&name=${street}&hasPostCodeBeenSelected=true",
+        "setAddress": "https://commande.dominos.fr/eStore/fr/CustomerDetails/SpecifyDeliveryAddressWithCustomerDetails",
+        "addToCart": "https://commande.dominos.fr/eStore/fr/Product/AddToOrder?timestamp=${timestamp}",
+        "removeFromCart": "https://commande.dominos.fr/eStore/fr/Basket/RemoveProduct?orderItemId=${numItem}&timestamp=${timestamp}",
+        "voucher": "https://commande.dominos.fr/eStore/fr/Basket/ApplyVoucher?voucherCode=${voucher}&addFromVoucherBox=true",
+        "validate": "https://commande.dominos.fr/eStore/fr/Checkout/Submit"
+    },
+    "track": ""
+}
+    

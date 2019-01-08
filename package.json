@@ -2,23 +2,33 @@
     "name": "apidomino",
     "version": "1.0.0",
     "description": "",
-    "main": "dist/index.js",
+    "main": "dist/Index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start:dev": "webpack-dev-server",
-        "start": "webpack --watch",
-        "run": "node dist/bundle.js"
+        "build": "concurrently 'tsc' 'webpack'",
+        "lint": "tslint --config tslint.json --exclude='**/*.d.ts' --exclude='node_modules/**/*.ts' src/**/*.ts --force",
+        "run": "node $npm_package_main",
+        "build:clean": "rimraf dist",
+        "typings:install": "typings install",
+        "build:watch": "concurrently 'tsc -w' 'webpack -w'"
     },
     "repository": {
         "type": "git",
         "url": "gitolite@109.25.55.189:nodeJs/apidomino.git"
     },
     "keywords": [
-        "pizza"
+        "pizza",
+        "dominos"
     ],
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@types/es6-promise": "^3.3.0",
+        "cheerio": "^1.0.0-rc.2",
+        "concurrently": "^2.2.0",
+        "dominos": "^2.1.1",
+        "es6-template-strings": "^2.0.1",
+        "file-loader": "^1.1.6",
+        "json-loader": "^0.5.7",
         "path": "^0.12.7",
         "pizzapi": "0.0.8",
         "tslib": "^1.9.3"
